@@ -9,8 +9,8 @@ function config -d "Get and set package configuration" -a package action key val
     return 0
   end
 
-  if test -z "$package"
-    echo "You must specify a package name."
+  if test -z "$package" -o "$package" = . -o "$package" = ..
+    echo "You must specify a valid package name."
     return 1
   end
 
@@ -19,7 +19,7 @@ function config -d "Get and set package configuration" -a package action key val
     case -l --list ''
       for file in $OMF_CONFIG/$package/**
         if test -f "$file"
-          printf "%s=%s\n" (realpath --relative-base="$OMF_CONFIG/$package" "$file" | tr '/' '.') (cat $file)
+          printf "%s=%s\n" (realpath --relative-base="$OMF_CONFIG/$package" "$file" | tr -s '/' '.') (cat $file)
         end
       end
 
@@ -32,7 +32,7 @@ function config -d "Get and set package configuration" -a package action key val
       end
 
       # Expand the key name into a directory tree.
-      set key (echo -n "$key" | tr '.' '/')
+      set key (echo -n "$key" | tr -s '.' '/')
 
       # Match which of the above actions was given.
       switch "$action"

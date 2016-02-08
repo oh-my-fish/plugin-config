@@ -23,6 +23,7 @@ Actions
   --unset     Remove a config key and value
 
 Options
-  -e|--edit   Edit a value with an editor
+  -e|--edit     Edit a value with an editor
+  -d|--default  Specify a value to use if a key is not set
 "
 end

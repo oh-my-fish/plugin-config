@@ -37,8 +37,19 @@ function config -d "Get and set package configuration" -a package action key val
       # Match which of the above actions was given.
       switch "$action"
         case -g --get
+          if begin; test "$value" = -d; or test "$value" = --default; end
+            if not set -q argv[5]
+              echo "You must specify a default value."
+              return 1
+            end
+
+            set default "$argv[5]"
+          end
+
           test -f $OMF_CONFIG/$package/$key
             and cat $OMF_CONFIG/$package/$key
+            or set -q default
+            and echo "$default"
 
         case -q --query
           test -f $OMF_CONFIG/$package/$key

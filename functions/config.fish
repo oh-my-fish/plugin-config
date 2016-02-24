@@ -68,9 +68,9 @@ function config -d "Get and set package configuration" -a package action key val
               if not set -q EDITOR
                 echo "No editor in `\$EDITOR` is specified."
 
-                if available vim
+                if type -q vim
                   set editor vim
-                else if available nano
+                else if type -q nano
                   set editor nano
                 else
                   return 1

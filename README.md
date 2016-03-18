@@ -45,9 +45,9 @@ There are more operations than just getting and setting that you can do on your 
 
 
 ## Config files
-Config values are stored in individual files and directories in `$OMF_CONFIG`. A directory is created for each namespace to hold config files at `$OMF_CONFIG/my-namespace`.
+Config values are stored in individual files and directories in `$FISH_CONFIG`. A directory is created for each namespace to hold config files at `$FISH_CONFIG/my-namespace`. When using Oh My Fish! (the default), `$FISH_CONFIG` will be the same as `$OMF_CONFIG`. Otherwise it will be set to `$XDG_CONFIG_HOME`, or fall back to `$HOME/.config`.
 
-Each key gets its own file inside the namespace directory. For example, if you have a key called `email` in a `mailer` namespace, you can expect a file at `$OMF_CONFIG/mailer/email` to exist, which contains as text the value of that key. If a key is nested, like our `misc.colors.header` example from earlier, each level of nesting is made into a directory separator. `misc.colors.header` then would be stored in `$OMF_CONFIG/namespace/misc/colors/header`.
+Each key gets its own file inside the namespace directory. For example, if you have a key called `email` in a `mailer` namespace, you can expect a file at `$FISH_CONFIG/mailer/email` to exist, which contains as text the value of that key. If a key is nested, like our `misc.colors.header` example from earlier, each level of nesting is made into a directory separator. `misc.colors.header` then would be stored in `$FISH_CONFIG/namespace/misc/colors/header`.
 
 Note that a key cannot hold both subkeys and a value.
 

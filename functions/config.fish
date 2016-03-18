@@ -1,4 +1,15 @@
 function config -d "Get and set package configuration" -a package action key value
+  # Set up FISH_CONFIG.
+  if not set -q FISH_CONFIG
+    if set -q OMF_CONFIG
+      set FISH_CONFIG "$OMF_CONFIG"
+    else if set -q XDG_CONFIG_HOME
+      set FISH_CONFIG "$XDG_CONFIG_HOME"
+    else
+      set FISH_CONFIG "$HOME/.config"
+    end
+  end
+
   # Check if the user needs some help.
   if begin; not set -q argv[1]; or contains -- -h $argv; or contains -- --help $argv; end
     test "$package" = -h
@@ -17,9 +28,9 @@ function config -d "Get and set package configuration" -a package action key val
   # Match the action given.
   switch "$action"
     case -l --list ''
-      for file in $OMF_CONFIG/$package/**
+      for file in $FISH_CONFIG/$package/**
         if test -f "$file"
-          printf "%s=%s\n" (realpath --relative-base="$OMF_CONFIG/$package" "$file" | tr -s '/' '.') (cat $file)
+          printf "%s=%s\n" (realpath --relative-base="$FISH_CONFIG/$package" "$file" | tr -s '/' '.') (cat $file)
         end
       end
 
@@ -46,8 +57,8 @@ function config -d "Get and set package configuration" -a package action key val
             set default "$argv[5]"
           end
 
-          if test -f $OMF_CONFIG/$package/$key
-            cat $OMF_CONFIG/$package/$key
+          if test -f $FISH_CONFIG/$package/$key
+            cat $FISH_CONFIG/$package/$key
           else if set -q default
             echo -n "$default"
           else
@@ -55,10 +66,10 @@ function config -d "Get and set package configuration" -a package action key val
           end
 
         case -q --query
-          test -f $OMF_CONFIG/$package/$key
+          test -f $FISH_CONFIG/$package/$key
 
         case -s --set
-          mkdir -p (dirname $OMF_CONFIG/$package/$key)
+          mkdir -p (dirname $FISH_CONFIG/$package/$key)
 
           # Check for any additional options.
           switch "$value"
@@ -82,14 +93,14 @@ function config -d "Get and set package configuration" -a package action key val
                 echo "Using `$editor` as editor."
               end
 
-              eval $editor $OMF_CONFIG/$package/$key
+              eval $editor $FISH_CONFIG/$package/$key
 
             case '*'
-              echo -n "$value" > $OMF_CONFIG/$package/$key
+              echo -n "$value" > $FISH_CONFIG/$package/$key
           end
 
         case -u --unset
-          rm $OMF_CONFIG/$package/$key
+          rm $FISH_CONFIG/$package/$key
       end
 
     case '*'
